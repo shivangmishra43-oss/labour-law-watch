@@ -10,11 +10,8 @@ on:
 permissions:
   contents: write
 
-
 jobs:
-
   update-central-labour-law-data:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -25,6 +22,8 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
 
       # ============================================
@@ -57,7 +56,49 @@ jobs:
 
 
       # ============================================
-      # 5. COLLECT CENTRAL E-GAZETTE
+      # 5. PRESERVE KARNATAKA WEBSITE DATA
+      # ============================================
+
+      - name: Preserve Karnataka website records
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+
+          path = Path("data/updates.json")
+
+          if path.exists():
+              data = json.loads(
+                  path.read_text(encoding="utf-8")
+              )
+
+              karnataka = [
+                  update
+                  for update in data.get("updates", [])
+                  if update.get("jurisdiction") == "Karnataka"
+              ]
+
+          else:
+              karnataka = []
+
+          Path("karnataka_updates_backup.json").write_text(
+              json.dumps(
+                  {
+                      "updates": karnataka
+                  },
+                  ensure_ascii=False,
+                  indent=2
+              ),
+              encoding="utf-8"
+          )
+
+          print(
+              f"Preserved Karnataka records: {len(karnataka)}"
+          )
+
+
+      # ============================================
+      # 6. COLLECT CENTRAL E-GAZETTE
       # ============================================
 
       - name: Collect Central eGazette updates
@@ -66,7 +107,7 @@ jobs:
 
 
       # ============================================
-      # 6. EXTRACT CENTRAL GAZETTE INFORMATION
+      # 7. EXTRACT CENTRAL GAZETTE INFORMATION
       # ============================================
 
       - name: Extract Central Gazette information
@@ -75,16 +116,92 @@ jobs:
 
 
       # ============================================
-      # 7. EXPORT WEBSITE DATA
+      # 8. EXPORT CENTRAL WEBSITE DATA
       # ============================================
 
-      - name: Export updates JSON
+      - name: Export Central website data
         run: |
           python export_updates.py
 
 
       # ============================================
-      # 8. COMMIT UPDATED WEBSITE DATA
+      # 9. MERGE KARNATAKA BACK
+      # ============================================
+
+      - name: Restore Karnataka website records
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+
+          path = Path("data/updates.json")
+          backup_path = Path(
+              "karnataka_updates_backup.json"
+          )
+
+          current = json.loads(
+              path.read_text(encoding="utf-8")
+          )
+
+          backup = json.loads(
+              backup_path.read_text(encoding="utf-8")
+          )
+
+          central = [
+              update
+              for update in current.get("updates", [])
+              if update.get("jurisdiction") != "Karnataka"
+          ]
+
+          karnataka = backup.get(
+              "updates",
+              []
+          )
+
+          merged = central + karnataka
+
+          merged.sort(
+              key=lambda update:
+                  update.get("publication_date") or "",
+              reverse=True
+          )
+
+          path.write_text(
+              json.dumps(
+                  {
+                      "count": len(merged),
+                      "updates": merged
+                  },
+                  ensure_ascii=False,
+                  indent=2
+              ),
+              encoding="utf-8"
+          )
+
+          print(
+              f"Central records: {len(central)}"
+          )
+
+          print(
+              f"Karnataka records restored: {len(karnataka)}"
+          )
+
+          print(
+              f"Total website records: {len(merged)}"
+          )
+
+
+      # ============================================
+      # 10. REMOVE TEMPORARY FILE
+      # ============================================
+
+      - name: Remove temporary Karnataka backup
+        run: |
+          rm -f karnataka_updates_backup.json
+
+
+      # ============================================
+      # 11. COMMIT WEBSITE DATA
       # ============================================
 
       - name: Commit updated website data
