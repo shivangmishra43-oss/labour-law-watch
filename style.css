@@ -1,47 +1,107 @@
 /* ==========================================================
-   UPDATE VIEW — OPAQUE WHITE BACKGROUND ONLY
+   UPDATE MODAL — FULL OPAQUE WHITE SCREEN
    ========================================================== */
 
 .modal {
     position: fixed !important;
-    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
 
-    width: 100vw !important;
-    height: 100vh !important;
+    width: 100% !important;
+    height: 100% !important;
 
-    z-index: 9999 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    z-index: 99999 !important;
+
+    display: block !important;
 
     background: #ffffff !important;
 
     opacity: 1 !important;
+
+    visibility: visible !important;
+
+    overflow-y: auto !important;
 }
 
 .modal.hidden {
     display: none !important;
 }
 
-/* Solid white layer covering the entire website */
+
+/* Completely opaque white layer */
+
 .modal-backdrop {
     position: fixed !important;
-    inset: 0 !important;
+
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
 
     width: 100vw !important;
     height: 100vh !important;
 
-    z-index: 9998 !important;
+    z-index: 99998 !important;
 
     background: #ffffff !important;
 
     opacity: 1 !important;
+
+    visibility: visible !important;
 
     backdrop-filter: none !important;
 }
 
-/* Keep the actual update content above the white layer */
+
+/* Update itself */
+
 .modal-card {
     position: relative !important;
-    z-index: 10000 !important;
+
+    z-index: 100000 !important;
+
+    width: 100% !important;
+    min-width: 100% !important;
+
+    min-height: 100vh !important;
+    height: auto !important;
+
+    max-width: none !important;
+    max-height: none !important;
+
+    margin: 0 !important;
+
+    overflow-y: visible !important;
 
     background: #ffffff !important;
+
+    border: none !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+
     opacity: 1 !important;
+}
+
+
+/* Update content */
+
+.modal-content {
+    width: 100% !important;
+
+    min-height: 100vh !important;
+
+    background: #ffffff !important;
+}
+
+
+/* Close button stays visible */
+
+.modal-close {
+    z-index: 100001 !important;
 }
