@@ -2,7 +2,6 @@ name: Daily Labour Law Updates
 
 on:
   schedule:
-    # Runs every day at 9:00 AM IST
     # 9:00 AM IST = 3:30 AM UTC
     - cron: "30 3 * * *"
 
@@ -11,7 +10,9 @@ on:
 permissions:
   contents: write
 
+
 jobs:
+
   update-labour-law-data:
 
     runs-on: ubuntu-latest
@@ -19,11 +20,12 @@ jobs:
     steps:
 
       # ============================================
-      # 1. DOWNLOAD THE REPOSITORY
+      # 1. CHECKOUT REPOSITORY
       # ============================================
 
       - name: Checkout repository
         uses: actions/checkout@v4
+
 
       # ============================================
       # 2. SET UP PYTHON
@@ -34,8 +36,9 @@ jobs:
         with:
           python-version: "3.13"
 
+
       # ============================================
-      # 3. INSTALL PYTHON PACKAGES
+      # 3. INSTALL DEPENDENCIES
       # ============================================
 
       - name: Install dependencies
@@ -43,64 +46,113 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+
       # ============================================
-      # 4. INSTALL PLAYWRIGHT + CHROMIUM
+      # 4. INSTALL PLAYWRIGHT
       # ============================================
 
       - name: Install Playwright browser
         run: |
           python -m playwright install --with-deps chromium
 
+
       # ============================================
-      # 5. COLLECT CENTRAL EGAZETTE
+      # 5. DIAGNOSTIC - KARNATAKA CONNECTIVITY
+      # ============================================
+
+      - name: Test Karnataka e-Gazette connectivity
+        run: |
+
+          echo "========================================"
+          echo "KARNATAKA E-GAZETTE NETWORK TEST"
+          echo "========================================"
+
+          echo ""
+          echo "Testing DNS..."
+          getent hosts erajyapatra.karnataka.gov.in || true
+
+          echo ""
+          echo "Testing HTTPS connection..."
+          curl \
+            --verbose \
+            --location \
+            --connect-timeout 30 \
+            --max-time 90 \
+            --output /tmp/karnataka_response.html \
+            --write-out "\nHTTP_STATUS=%{http_code}\nTOTAL_TIME=%{time_total}\n" \
+            "https://erajyapatra.karnataka.gov.in/"
+
+          echo ""
+          echo "Response file information:"
+          ls -lh /tmp/karnataka_response.html || true
+
+          echo ""
+          echo "First 500 characters of response:"
+          head -c 500 /tmp/karnataka_response.html || true
+
+          echo ""
+          echo ""
+          echo "========================================"
+          echo "NETWORK TEST COMPLETE"
+          echo "========================================"
+
+
+      # ============================================
+      # 6. COLLECT CENTRAL EGAZETTE
       # ============================================
 
       - name: Collect Central eGazette updates
         run: |
           python collectors/egazette.py
 
+
       # ============================================
-      # 6. EXTRACT CENTRAL GAZETTE INFORMATION
+      # 7. EXTRACT CENTRAL GAZETTE INFORMATION
       # ============================================
 
       - name: Extract Central Gazette information
         run: |
           python extractors/legal_extractor.py
 
+
       # ============================================
-      # 7. COLLECT KARNATAKA E-GAZETTE
+      # 8. COLLECT KARNATAKA E-GAZETTE
       # ============================================
 
       - name: Collect Karnataka e-Gazette updates
         run: |
           python collectors/karnataka.py
 
+
       # ============================================
-      # 8. EXTRACT KARNATAKA GAZETTE INFORMATION
+      # 9. EXTRACT KARNATAKA GAZETTE INFORMATION
       # ============================================
 
       - name: Extract Karnataka Gazette information
         run: |
           python extractors/karnataka_extractor.py
 
+
       # ============================================
-      # 9. IMPORT KARNATAKA DATA
+      # 10. IMPORT KARNATAKA DATA
       # ============================================
 
       - name: Import Karnataka updates
         run: |
           python database/import_karnataka.py
 
+
       # ============================================
-      # 10. EXPORT WEBSITE DATA
+      # 11. EXPORT WEBSITE DATA
       # ============================================
 
       - name: Export updates JSON
         run: |
           python export_updates.py
 
+
       # ============================================
-      # 11. SAVE UPDATED WEBSITE DATA
+      # 12. COMMIT UPDATED WEBSITE DATA
       # ============================================
 
       - name: Commit updated website data
