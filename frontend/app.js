@@ -1,289 +1,96 @@
 // ============================================
 // LABOUR LAW WATCH
-// Frontend application
+// FRONTEND JAVASCRIPT
+// ============================================
+
+
+// ============================================
+// GLOBAL DATA
 // ============================================
 
 let allUpdates = [];
-let filteredUpdates = [];
 
 
 // ============================================
 // DOM ELEMENTS
 // ============================================
 
-const searchInput = document.getElementById("searchInput");
+const updatesContainer =
+    document.getElementById("updatesContainer");
 
-const jurisdictionButtons = document.querySelectorAll(
-    "[data-jurisdiction]"
-);
+const searchInput =
+    document.getElementById("searchInput");
 
-const typeFilters = document.getElementById(
-    "typeFilters"
-);
+const jurisdictionFilter =
+    document.getElementById("jurisdictionFilter");
 
-const sortSelect = document.getElementById(
-    "sortSelect"
-);
+const typeFilter =
+    document.getElementById("typeFilter");
 
-const updatesContainer = document.getElementById(
-    "updatesContainer"
-);
+const resultsCount =
+    document.getElementById("resultsCount");
 
-const loadingState = document.getElementById(
-    "loadingState"
-);
+const totalUpdates =
+    document.getElementById("totalUpdates");
 
-const errorState = document.getElementById(
-    "errorState"
-);
+const karnatakaUpdates =
+    document.getElementById("karnatakaUpdates");
 
-const errorMessage = document.getElementById(
-    "errorMessage"
-);
+const centralUpdates =
+    document.getElementById("centralUpdates");
 
-const emptyState = document.getElementById(
-    "emptyState"
-);
+const latestDate =
+    document.getElementById("latestDate");
 
-const resultsCount = document.getElementById(
-    "resultsCount"
-);
+const detailModal =
+    document.getElementById("detailModal");
 
-const totalUpdates = document.getElementById(
-    "totalUpdates"
-);
+const modalBody =
+    document.getElementById("modalBody");
 
-const karnatakaUpdates = document.getElementById(
-    "karnatakaUpdates"
-);
-
-const centralUpdates = document.getElementById(
-    "centralUpdates"
-);
-
-const latestDate = document.getElementById(
-    "latestDate"
-);
-
-const detailModal = document.getElementById(
-    "detailModal"
-);
-
-const modalClose = document.getElementById(
-    "modalClose"
-);
-
-const modalBackdrop = detailModal
-    ? detailModal.querySelector(".modal-backdrop")
-    : null;
-
-const modalSource = document.getElementById(
-    "modalSource"
-);
-
-const modalTitle = document.getElementById(
-    "modalTitle"
-);
-
-const modalMeta = document.getElementById(
-    "modalMeta"
-);
-
-const modalContent = document.getElementById(
-    "modalContent"
-);
-
-const modalSourceButton = document.getElementById(
-    "modalSourceButton"
-);
-
-const modalDocumentButton = document.getElementById(
-    "modalDocumentButton"
-);
+const closeModal =
+    document.getElementById("closeModal");
 
 
 // ============================================
-// CURRENT FILTER STATE
-// ============================================
-
-let currentJurisdiction = "all";
-let currentType = "all";
-
-
-// ============================================
-// INITIALISE
-// ============================================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        setupEventListeners();
-
-        loadUpdates();
-
-    }
-);
-
-
-// ============================================
-// EVENT LISTENERS
-// ============================================
-
-function setupEventListeners() {
-
-    // -----------------------------
-    // SEARCH
-    // -----------------------------
-
-    if (searchInput) {
-
-        searchInput.addEventListener(
-            "input",
-            () => {
-
-                applyFilters();
-
-            }
-        );
-
-    }
-
-
-    // -----------------------------
-    // JURISDICTION BUTTONS
-    // -----------------------------
-
-    jurisdictionButtons.forEach(
-        (button) => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    currentJurisdiction =
-                        button.dataset.jurisdiction || "all";
-
-                    jurisdictionButtons.forEach(
-                        (item) => {
-
-                            item.classList.remove(
-                                "active"
-                            );
-
-                        }
-                    );
-
-                    button.classList.add(
-                        "active"
-                    );
-
-                    applyFilters();
-
-                }
-            );
-
-        }
-    );
-
-
-    // -----------------------------
-    // SORT
-    // -----------------------------
-
-    if (sortSelect) {
-
-        sortSelect.addEventListener(
-            "change",
-            () => {
-
-                applyFilters();
-
-            }
-        );
-
-    }
-
-
-    // -----------------------------
-    // MODAL CLOSE
-    // -----------------------------
-
-    if (modalClose) {
-
-        modalClose.addEventListener(
-            "click",
-            closeModal
-        );
-
-    }
-
-
-    if (modalBackdrop) {
-
-        modalBackdrop.addEventListener(
-            "click",
-            closeModal
-        );
-
-    }
-
-
-    // -----------------------------
-    // ESCAPE KEY
-    // -----------------------------
-
-    document.addEventListener(
-        "keydown",
-        (event) => {
-
-            if (
-                event.key === "Escape" &&
-                detailModal &&
-                !detailModal.classList.contains("hidden")
-            ) {
-
-                closeModal();
-
-            }
-
-        }
-    );
-
-}
-
-
-// ============================================
-// LOAD UPDATES FROM FLASK
+// LOAD DATA
 // ============================================
 
 async function loadUpdates() {
 
-    showLoading();
-
     try {
 
-        const response = await fetch(
-            "/api/updates",
-            {
-                method: "GET",
-                headers: {
-                    "Accept": "application/json"
-                }
-            }
-        );
+        /*
+         * IMPORTANT:
+         *
+         * This is intentionally a relative path.
+         *
+         * It works both locally:
+         *
+         * http://localhost:8000/data/updates.json
+         *
+         * and on GitHub Pages:
+         *
+         * /labour-law-watch/data/updates.json
+         */
+
+        const response =
+            await fetch("data/updates.json", {
+                cache: "no-store"
+            });
 
 
         if (!response.ok) {
 
             throw new Error(
-                `Server returned ${response.status}`
+                `Could not load updates.json (${response.status})`
             );
 
         }
 
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
 
         if (
@@ -292,35 +99,47 @@ async function loadUpdates() {
         ) {
 
             throw new Error(
-                "Invalid API response"
+                "Invalid updates.json format."
             );
 
         }
 
 
-        allUpdates = data.updates;
+        allUpdates =
+            data.updates;
 
-        filteredUpdates = [...allUpdates];
 
+        populateTypeFilter();
 
-        buildDynamicTypeFilters();
+        updateStatistics();
 
-        updateStats();
-
-        applyFilters();
+        renderUpdates();
 
 
     } catch (error) {
 
         console.error(
-            "Unable to load updates:",
+            "Error loading updates:",
             error
         );
 
-        showError(
-            "Unable to connect to the Flask backend. " +
-            "Please make sure the server is running."
-        );
+
+        updatesContainer.innerHTML = `
+
+            <div class="empty-state">
+
+                <h3>
+                    Unable to load updates
+                </h3>
+
+                <p>
+                    Please check whether
+                    data/updates.json is available.
+                </p>
+
+            </div>
+
+        `;
 
     }
 
@@ -328,130 +147,139 @@ async function loadUpdates() {
 
 
 // ============================================
-// BUILD UPDATE-TYPE FILTERS
+// POPULATE UPDATE TYPE FILTER
 // ============================================
 
-function buildDynamicTypeFilters() {
+function populateTypeFilter() {
 
-    if (!typeFilters) {
-
-        console.warn(
-            "typeFilters element was not found."
-        );
-
+    if (!typeFilter) {
         return;
-
     }
 
 
     const types = [
         ...new Set(
             allUpdates
-                .map(
-                    (update) =>
-                        update.update_type
-                )
-                .filter(
-                    (type) =>
-                        type &&
-                        String(type).trim() !== ""
-                )
-                .map(
-                    (type) =>
-                        String(type).trim()
-                )
+                .map(update => update.update_type)
+                .filter(type => type)
+                .map(type => String(type).trim())
         )
     ];
 
 
     types.sort(
         (a, b) =>
-            a.localeCompare(
-                b
-            )
+            a.localeCompare(b)
     );
 
 
-    let html = `
-        <button
-            type="button"
-            class="filter-button active"
-            data-type="all"
-        >
+    typeFilter.innerHTML = `
+
+        <option value="all">
             All
-        </button>
+        </option>
+
     `;
 
 
-    types.forEach(
-        (type) => {
+    types.forEach(type => {
 
-            html += `
-                <button
-                    type="button"
-                    class="filter-button"
-                    data-type="${escapeAttribute(type)}"
-                >
-                    ${escapeHtml(type)}
-                </button>
-            `;
+        const option =
+            document.createElement("option");
 
-        }
-    );
+        option.value = type;
 
+        option.textContent = type;
 
-    typeFilters.innerHTML = html;
+        typeFilter.appendChild(option);
 
-
-    const buttons =
-        typeFilters.querySelectorAll(
-            "[data-type]"
-        );
-
-
-    buttons.forEach(
-        (button) => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    currentType =
-                        button.dataset.type || "all";
-
-
-                    buttons.forEach(
-                        (item) => {
-
-                            item.classList.remove(
-                                "active"
-                            );
-
-                        }
-                    );
-
-
-                    button.classList.add(
-                        "active"
-                    );
-
-
-                    applyFilters();
-
-                }
-            );
-
-        }
-    );
+    });
 
 }
 
 
 // ============================================
-// APPLY FILTERS
+// UPDATE STATISTICS
 // ============================================
 
-function applyFilters() {
+function updateStatistics() {
+
+    const total =
+        allUpdates.length;
+
+
+    const karnataka =
+        allUpdates.filter(
+            update =>
+                String(update.jurisdiction)
+                    .toLowerCase()
+                    === "karnataka"
+        ).length;
+
+
+    const central =
+        allUpdates.filter(
+            update =>
+                String(update.jurisdiction)
+                    .toLowerCase()
+                    === "central"
+        ).length;
+
+
+    if (totalUpdates) {
+
+        totalUpdates.textContent =
+            total;
+
+    }
+
+
+    if (karnatakaUpdates) {
+
+        karnatakaUpdates.textContent =
+            karnataka;
+
+    }
+
+
+    if (centralUpdates) {
+
+        centralUpdates.textContent =
+            central;
+
+    }
+
+
+    if (
+        latestDate &&
+        allUpdates.length > 0
+    ) {
+
+        const dates =
+            allUpdates
+                .map(update => update.publication_date)
+                .filter(date => date)
+                .sort()
+                .reverse();
+
+
+        if (dates.length > 0) {
+
+            latestDate.textContent =
+                formatDate(dates[0]);
+
+        }
+
+    }
+
+}
+
+
+// ============================================
+// FILTER UPDATES
+// ============================================
+
+function getFilteredUpdates() {
 
     const searchTerm =
         searchInput
@@ -461,287 +289,153 @@ function applyFilters() {
             : "";
 
 
-    filteredUpdates =
-        allUpdates.filter(
-            (update) => {
-
-                // -------------------------
-                // JURISDICTION
-                // -------------------------
-
-                if (
-                    currentJurisdiction !== "all" &&
-                    String(
-                        update.jurisdiction || ""
-                    ).toLowerCase() !==
-                    currentJurisdiction.toLowerCase()
-                ) {
-
-                    return false;
-
-                }
+    const jurisdiction =
+        jurisdictionFilter
+            ? jurisdictionFilter.value
+            : "all";
 
 
-                // -------------------------
-                // UPDATE TYPE
-                // -------------------------
-
-                if (
-                    currentType !== "all" &&
-                    String(
-                        update.update_type || ""
-                    ).toLowerCase() !==
-                    currentType.toLowerCase()
-                ) {
-
-                    return false;
-
-                }
+    const type =
+        typeFilter
+            ? typeFilter.value
+            : "all";
 
 
-                // -------------------------
-                // SEARCH
-                // -------------------------
+    return allUpdates.filter(update => {
 
-                if (searchTerm) {
+        // ------------------------------------
+        // SEARCH
+        // ------------------------------------
 
-                    const searchableText = [
+        const searchableText = [
 
-                        update.title,
+            update.title,
 
-                        update.description,
+            update.description,
 
-                        update.topic,
+            update.topic,
 
-                        update.source,
+            update.update_type,
 
-                        update.jurisdiction,
+            update.jurisdiction,
 
-                        update.update_type
+            update.source
 
-                    ]
-                        .filter(
-                            (value) =>
-                                value !== null &&
-                                value !== undefined
-                        )
-                        .join(" ")
-                        .toLowerCase();
+        ]
+            .filter(value => value)
+            .join(" ")
+            .toLowerCase();
 
 
-                    if (
-                        !searchableText.includes(
-                            searchTerm
-                        )
-                    ) {
+        if (
+            searchTerm &&
+            !searchableText.includes(searchTerm)
+        ) {
 
-                        return false;
-
-                    }
-
-                }
-
-
-                return true;
-
-            }
-        );
-
-
-    // -----------------------------
-    // SORT
-    // -----------------------------
-
-    const sortOrder =
-        sortSelect
-            ? sortSelect.value
-            : "newest";
-
-
-    filteredUpdates.sort(
-        (a, b) => {
-
-            const dateA =
-                parseDate(
-                    a.publication_date
-                );
-
-            const dateB =
-                parseDate(
-                    b.publication_date
-                );
-
-
-            if (
-                sortOrder === "oldest"
-            ) {
-
-                return dateA - dateB;
-
-            }
-
-
-            return dateB - dateA;
+            return false;
 
         }
-    );
 
 
-    renderUpdates();
+        // ------------------------------------
+        // JURISDICTION
+        // ------------------------------------
+
+        if (
+            jurisdiction !== "all" &&
+            update.jurisdiction !== jurisdiction
+        ) {
+
+            return false;
+
+        }
+
+
+        // ------------------------------------
+        // UPDATE TYPE
+        // ------------------------------------
+
+        if (
+            type !== "all" &&
+            update.update_type !== type
+        ) {
+
+            return false;
+
+        }
+
+
+        return true;
+
+    });
 
 }
 
 
 // ============================================
-// UPDATE STATS
-// ============================================
-
-function updateStats() {
-
-    if (totalUpdates) {
-
-        totalUpdates.textContent =
-            allUpdates.length;
-
-    }
-
-
-    if (karnatakaUpdates) {
-
-        karnatakaUpdates.textContent =
-            allUpdates.filter(
-                (update) =>
-                    String(
-                        update.jurisdiction || ""
-                    ).toLowerCase() ===
-                    "karnataka"
-            ).length;
-
-    }
-
-
-    if (centralUpdates) {
-
-        centralUpdates.textContent =
-            allUpdates.filter(
-                (update) =>
-                    String(
-                        update.jurisdiction || ""
-                    ).toLowerCase() ===
-                    "central"
-            ).length;
-
-    }
-
-
-    if (latestDate) {
-
-        const dates =
-            allUpdates
-                .map(
-                    (update) =>
-                        update.publication_date
-                )
-                .filter(Boolean)
-                .map(parseDate)
-                .filter(
-                    (date) =>
-                        !isNaN(date.getTime())
-                );
-
-
-        if (dates.length > 0) {
-
-            const newest =
-                new Date(
-                    Math.max(
-                        ...dates.map(
-                            (date) =>
-                                date.getTime()
-                        )
-                    )
-                );
-
-
-            latestDate.textContent =
-                formatDate(
-                    newest
-                );
-
-        } else {
-
-            latestDate.textContent =
-                "—";
-
-        }
-
-    }
-
-}
-
-
-// ============================================
-// RENDER UPDATE CARDS
+// RENDER UPDATES
 // ============================================
 
 function renderUpdates() {
 
-    hideLoading();
-
-    hideError();
+    const filteredUpdates =
+        getFilteredUpdates();
 
 
     if (resultsCount) {
 
         resultsCount.textContent =
-            `${filteredUpdates.length} update${
+            `${filteredUpdates.length} ${
                 filteredUpdates.length === 1
-                    ? ""
-                    : "s"
+                    ? "update"
+                    : "updates"
             }`;
 
     }
 
 
-    if (!updatesContainer) {
-
-        console.error(
-            "updatesContainer element not found."
-        );
+    if (
+        !updatesContainer
+    ) {
 
         return;
 
     }
-
-
-    updatesContainer.innerHTML = "";
 
 
     if (
         filteredUpdates.length === 0
     ) {
 
-        showEmpty();
+        updatesContainer.innerHTML = `
+
+            <div class="empty-state">
+
+                <h3>
+                    No updates found
+                </h3>
+
+                <p>
+                    Try changing your search
+                    or filters.
+                </p>
+
+            </div>
+
+        `;
 
         return;
 
     }
 
 
-    hideEmpty();
+    updatesContainer.innerHTML =
+        filteredUpdates
+            .map(update => createUpdateCard(update))
+            .join("");
 
 
-    filteredUpdates.forEach(
-        (update) => {
-
-            updatesContainer.appendChild(
-                createUpdateCard(
-                    update
-                )
-            );
-
-        }
-    );
+    attachCardListeners();
 
 }
 
@@ -750,336 +444,392 @@ function renderUpdates() {
 // CREATE UPDATE CARD
 // ============================================
 
-function createUpdateCard(
-    update
-) {
+function createUpdateCard(update) {
 
-    const card =
-        document.createElement(
-            "article"
+    const title =
+        escapeHtml(
+            update.title || "Untitled update"
         );
 
 
-    card.className =
-        "update-card";
-
-
-    const updateType =
-        update.update_type ||
-        "Update";
+    const description =
+        escapeHtml(
+            update.description ||
+            "No summary available."
+        );
 
 
     const jurisdiction =
-        update.jurisdiction ||
-        "—";
+        escapeHtml(
+            update.jurisdiction || "—"
+        );
 
 
-    const title =
-        update.title ||
-        "Untitled update";
+    const type =
+        escapeHtml(
+            update.update_type || "Update"
+        );
 
 
-    const description =
-        getShortDescription(
-            update.description
+    const topic =
+        escapeHtml(
+            update.topic || "Labour Law"
         );
 
 
     const publicationDate =
         update.publication_date
-            ? formatDate(
-                update.publication_date
-            )
+            ? formatDate(update.publication_date)
             : "—";
 
 
-    const effectiveDate =
-        update.effective_date
-            ? formatDate(
-                update.effective_date
-            )
-            : null;
+    return `
 
+        <article
+            class="update-card"
+            data-id="${escapeHtml(
+                String(update.id ?? "")
+            )}"
+        >
 
-    const topic =
-        update.topic ||
-        "";
+            <div class="card-top">
 
-
-    card.innerHTML = `
-
-        <div class="card-top">
-
-            <div class="card-badges">
-
-                <span class="badge badge-type">
-                    ${escapeHtml(updateType)}
+                <span class="jurisdiction-badge">
+                    ${jurisdiction}
                 </span>
 
-                <span class="badge badge-jurisdiction">
-                    ${escapeHtml(jurisdiction)}
+                <span class="date">
+                    ${publicationDate}
                 </span>
 
             </div>
 
-        </div>
+
+            <h3 class="card-title">
+                ${title}
+            </h3>
 
 
-        <h2 class="card-title">
-            ${escapeHtml(title)}
-        </h2>
+            <p class="card-description">
+                ${description}
+            </p>
 
 
-        <div class="card-dates">
+            <div class="card-meta">
 
-            <div class="date-item">
-
-                <span class="date-label">
-                    Published
+                <span>
+                    ${type}
                 </span>
 
-                <span class="date-value">
-                    ${escapeHtml(publicationDate)}
+                <span>
+                    ${topic}
                 </span>
 
             </div>
-
-            ${
-                effectiveDate
-                    ? `
-                        <div class="date-item">
-
-                            <span class="date-label">
-                                Effective
-                            </span>
-
-                            <span class="date-value">
-                                ${escapeHtml(
-                                    effectiveDate
-                                )}
-                            </span>
-
-                        </div>
-                    `
-                    : ""
-            }
-
-        </div>
-
-
-        ${
-            description
-                ? `
-                    <p class="card-description">
-                        ${escapeHtml(description)}
-                    </p>
-                `
-                : ""
-        }
-
-
-        ${
-            topic
-                ? `
-                    <div class="card-topic">
-                        ${escapeHtml(topic)}
-                    </div>
-                `
-                : ""
-        }
-
-
-        <div class="card-footer">
-
-            <span class="card-source">
-                ${escapeHtml(
-                    update.source ||
-                    "Official source"
-                )}
-            </span>
 
 
             <button
+                class="read-more"
                 type="button"
-                class="view-button"
-                data-update-id="${escapeAttribute(
-                    update.id
+                data-id="${escapeHtml(
+                    String(update.id ?? "")
                 )}"
             >
-                View update →
+                View update
+                <span>→</span>
             </button>
 
-        </div>
+        </article>
 
     `;
-
-
-    const viewButton =
-        card.querySelector(
-            ".view-button"
-        );
-
-
-    if (viewButton) {
-
-        viewButton.addEventListener(
-            "click",
-            () => {
-
-                openModal(
-                    update
-                );
-
-            }
-        );
-
-    }
-
-
-    return card;
 
 }
 
 
 // ============================================
-// MODAL
+// ATTACH CARD LISTENERS
 // ============================================
 
-function openModal(
-    update
-) {
+function attachCardListeners() {
 
-    if (!detailModal) {
+    const buttons =
+        document.querySelectorAll(
+            ".read-more"
+        );
+
+
+    buttons.forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                const id =
+                    button.dataset.id;
+
+                openUpdateModal(id);
+
+            }
+        );
+
+    });
+
+
+    const cards =
+        document.querySelectorAll(
+            ".update-card"
+        );
+
+
+    cards.forEach(card => {
+
+        card.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target.closest(
+                        ".read-more"
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+                const id =
+                    card.dataset.id;
+
+                openUpdateModal(id);
+
+            }
+        );
+
+    });
+
+}
+
+
+// ============================================
+// OPEN DETAIL MODAL
+// ============================================
+
+function openUpdateModal(id) {
+
+    const update =
+        allUpdates.find(
+            item =>
+                String(item.id) === String(id)
+        );
+
+
+    if (!update) {
 
         return;
 
     }
 
 
-    if (modalSource) {
-
-        modalSource.textContent =
-            update.source ||
-            "Official source";
-
-    }
+    const title =
+        escapeHtml(
+            update.title || "Untitled update"
+        );
 
 
-    if (modalTitle) {
-
-        modalTitle.textContent =
-            update.title ||
-            "Untitled update";
-
-    }
+    const description =
+        escapeHtml(
+            update.description ||
+            "No summary available."
+        );
 
 
-    if (modalMeta) {
-
-        const metaParts = [];
-
-
-        if (update.update_type) {
-
-            metaParts.push(
-                update.update_type
-            );
-
-        }
+    const jurisdiction =
+        escapeHtml(
+            update.jurisdiction || "—"
+        );
 
 
-        if (update.jurisdiction) {
-
-            metaParts.push(
-                update.jurisdiction
-            );
-
-        }
+    const type =
+        escapeHtml(
+            update.update_type || "—"
+        );
 
 
-        if (update.topic) {
-
-            metaParts.push(
-                update.topic
-            );
-
-        }
+    const topic =
+        escapeHtml(
+            update.topic || "—"
+        );
 
 
-        modalMeta.textContent =
-            metaParts.join(
-                " • "
-            );
-
-    }
+    const source =
+        escapeHtml(
+            update.source || "—"
+        );
 
 
-    if (modalContent) {
-
-        modalContent.innerHTML =
-            buildModalContent(
-                update
-            );
-
-    }
+    const publicationDate =
+        update.publication_date
+            ? formatDate(update.publication_date)
+            : "—";
 
 
-    if (
-        modalSourceButton
-    ) {
-
-        if (
-            update.source_url
-        ) {
-
-            modalSourceButton.href =
-                update.source_url;
-
-            modalSourceButton.style.display =
-                "inline-flex";
-
-        } else {
-
-            modalSourceButton.style.display =
-                "none";
-
-        }
-
-    }
+    const effectiveDate =
+        update.effective_date
+            ? formatDate(update.effective_date)
+            : "—";
 
 
-    if (
-        modalDocumentButton
-    ) {
+    const sourceUrl =
+        safeUrl(update.source_url);
 
-        if (
-            update.document_url
-        ) {
 
-            modalDocumentButton.href =
-                update.document_url;
+    const documentUrl =
+        safeUrl(update.document_url);
 
-            modalDocumentButton.style.display =
-                "inline-flex";
 
-        } else {
+    modalBody.innerHTML = `
 
-            modalDocumentButton.style.display =
-                "none";
+        <div class="modal-header">
 
-        }
+            <span class="jurisdiction-badge">
+                ${jurisdiction}
+            </span>
 
-    }
+            <span class="date">
+                ${publicationDate}
+            </span>
+
+        </div>
+
+
+        <h2 class="modal-title">
+            ${title}
+        </h2>
+
+
+        <div class="modal-details">
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Source
+                </span>
+
+                <span class="detail-value">
+                    ${source}
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Update Type
+                </span>
+
+                <span class="detail-value">
+                    ${type}
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Topic
+                </span>
+
+                <span class="detail-value">
+                    ${topic}
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Publication Date
+                </span>
+
+                <span class="detail-value">
+                    ${publicationDate}
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Effective Date
+                </span>
+
+                <span class="detail-value">
+                    ${effectiveDate}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <section class="modal-section">
+
+            <h3>
+                Summary
+            </h3>
+
+            <p>
+                ${description}
+            </p>
+
+        </section>
+
+
+        <div class="modal-actions">
+
+            ${
+                sourceUrl
+                    ? `
+                        <a
+                            href="${sourceUrl}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="source-button"
+                        >
+                            Source Website
+                        </a>
+                    `
+                    : ""
+            }
+
+
+            ${
+                documentUrl
+                    ? `
+                        <a
+                            href="${documentUrl}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="source-button primary"
+                        >
+                            View Gazette
+                        </a>
+                    `
+                    : ""
+            }
+
+        </div>
+
+    `;
 
 
     detailModal.classList.remove(
         "hidden"
-    );
-
-
-    detailModal.setAttribute(
-        "aria-hidden",
-        "false"
     );
 
 
@@ -1090,7 +840,11 @@ function openModal(
 }
 
 
-function closeModal() {
+// ============================================
+// CLOSE MODAL
+// ============================================
+
+function closeDetailModal() {
 
     if (!detailModal) {
 
@@ -1104,12 +858,6 @@ function closeModal() {
     );
 
 
-    detailModal.setAttribute(
-        "aria-hidden",
-        "true"
-    );
-
-
     document.body.classList.remove(
         "modal-open"
     );
@@ -1118,696 +866,115 @@ function closeModal() {
 
 
 // ============================================
-// MODAL CONTENT
+// EVENT LISTENERS
 // ============================================
 
-function buildModalContent(
-    update
-) {
-
-    let html = "";
-
-
-    if (
-        update.description
-    ) {
-
-        const sections =
-            parseDescription(
-                update.description
-            );
-
-
-        if (
-            sections.summary
-        ) {
-
-            html += `
-                <section class="detail-section">
-
-                    <h3>
-                        Summary
-                    </h3>
-
-                    <p>
-                        ${escapeHtml(
-                            sections.summary
-                        )}
-                    </p>
-
-                </section>
-            `;
-
-        }
-
-
-        if (
-            sections.whatChanged
-        ) {
-
-            html += `
-                <section class="detail-section">
-
-                    <h3>
-                        What changed
-                    </h3>
-
-                    <p>
-                        ${escapeHtml(
-                            sections.whatChanged
-                        )}
-                    </p>
-
-                </section>
-            `;
-
-        }
-
-
-        if (
-            sections.provisions
-        ) {
-
-            html += `
-                <section class="detail-section">
-
-                    <h3>
-                        Provisions
-                    </h3>
-
-                    <p>
-                        ${escapeHtml(
-                            sections.provisions
-                        )}
-                    </p>
-
-                </section>
-            `;
-
-        }
-
-
-        if (
-            sections.affected
-        ) {
-
-            html += `
-                <section class="detail-section">
-
-                    <h3>
-                        Who is affected
-                    </h3>
-
-                    <p>
-                        ${escapeHtml(
-                            sections.affected
-                        )}
-                    </p>
-
-                </section>
-            `;
-
-        }
-
-
-        if (
-            sections.action
-        ) {
-
-            html += `
-                <section class="detail-section">
-
-                    <h3>
-                        Action required
-                    </h3>
-
-                    <p>
-                        ${escapeHtml(
-                            sections.action
-                        )}
-                    </p>
-
-                </section>
-            `;
-
-        }
-
-    }
-
-
-    // -----------------------------
-    // DATES
-    // -----------------------------
-
-    html += `
-
-        <section class="detail-section">
-
-            <h3>
-                Key dates
-            </h3>
-
-            <div class="detail-grid">
-
-                <div class="detail-item">
-
-                    <span>
-                        Publication date
-                    </span>
-
-                    <strong>
-                        ${
-                            update.publication_date
-                                ? escapeHtml(
-                                    formatDate(
-                                        update.publication_date
-                                    )
-                                )
-                                : "—"
-                        }
-                    </strong>
-
-                </div>
-
-
-                <div class="detail-item">
-
-                    <span>
-                        Effective date
-                    </span>
-
-                    <strong>
-                        ${
-                            update.effective_date
-                                ? escapeHtml(
-                                    formatDate(
-                                        update.effective_date
-                                    )
-                                )
-                                : "—"
-                        }
-                    </strong>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    `;
-
-
-    if (
-        update.topic
-    ) {
-
-        html += `
-
-            <section class="detail-section">
-
-                <h3>
-                    Topic
-                </h3>
-
-                <p>
-                    ${escapeHtml(
-                        update.topic
-                    )}
-                </p>
-
-            </section>
-
-        `;
-
-    }
-
-
-    if (!html.trim()) {
-
-        html = `
-            <p>
-                No additional summary is available
-                for this update.
-            </p>
-        `;
-
-    }
-
-
-    return html;
-
-}
-
-
-// ============================================
-// DESCRIPTION PARSER
-// ============================================
-
-function parseDescription(
-    description
-) {
-
-    const result = {
-
-        summary: "",
-
-        whatChanged: "",
-
-        provisions: "",
-
-        affected: "",
-
-        action: ""
-
-    };
-
-
-    if (
-        !description
-    ) {
-
-        return result;
-
-    }
-
-
-    const text =
-        String(
-            description
-        );
-
-
-    // Try to detect common headings.
-
-    const patterns = [
-
-        {
-            key: "summary",
-            names: [
-                "Summary",
-                "SUMMARY"
-            ]
-        },
-
-        {
-            key: "whatChanged",
-            names: [
-                "What changed",
-                "WHAT CHANGED"
-            ]
-        },
-
-        {
-            key: "provisions",
-            names: [
-                "Provisions",
-                "PROVISIONS"
-            ]
-        },
-
-        {
-            key: "affected",
-            names: [
-                "Who is affected",
-                "WHO IS AFFECTED"
-            ]
-        },
-
-        {
-            key: "action",
-            names: [
-                "Action required",
-                "ACTION REQUIRED"
-            ]
-        }
-
-    ];
-
-
-    let foundHeading =
-        false;
-
-
-    patterns.forEach(
-        (pattern) => {
-
-            pattern.names.forEach(
-                (heading) => {
-
-                    if (
-                        text.includes(
-                            heading + ":"
-                        )
-                    ) {
-
-                        foundHeading = true;
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-
-    if (!foundHeading) {
-
-        result.summary =
-            text.trim();
-
-        return result;
-
-    }
-
-
-    // Basic heading-based extraction.
-
-    const headingRegex =
-        /(Summary|What changed|Provisions|Who is affected|Action required)\s*:/gi;
-
-
-    const matches = [
-        ...text.matchAll(
-            headingRegex
-        )
-    ];
-
-
-    matches.forEach(
-        (
-            match,
-            index
-        ) => {
-
-            const heading =
-                match[1]
-                    .toLowerCase();
-
-
-            const start =
-                match.index +
-                match[0].length;
-
-
-            const end =
-                index + 1 <
-                matches.length
-                    ? matches[
-                        index + 1
-                    ].index
-                    : text.length;
-
-
-            const value =
-                text
-                    .slice(
-                        start,
-                        end
-                    )
-                    .trim();
-
-
-            if (
-                heading ===
-                "summary"
-            ) {
-
-                result.summary =
-                    value;
-
-            }
-
-
-            if (
-                heading ===
-                "what changed"
-            ) {
-
-                result.whatChanged =
-                    value;
-
-            }
-
-
-            if (
-                heading ===
-                "provisions"
-            ) {
-
-                result.provisions =
-                    value;
-
-            }
-
-
-            if (
-                heading ===
-                "who is affected"
-            ) {
-
-                result.affected =
-                    value;
-
-            }
-
-
-            if (
-                heading ===
-                "action required"
-            ) {
-
-                result.action =
-                    value;
-
-            }
-
-        }
-    );
-
-
-    return result;
-
-}
-
-
-// ============================================
-// SHORT DESCRIPTION
-// ============================================
-
-function getShortDescription(
-    description
-) {
-
-    if (
-        !description
-    ) {
-
-        return "";
-
-    }
-
-
-    const text =
-        String(
-            description
-        ).trim();
-
-
-    if (
-        text.length <= 220
-    ) {
-
-        return text;
-
-    }
-
-
-    return (
-        text.substring(
-            0,
-            220
-        ).trim() +
-        "..."
+if (searchInput) {
+
+    searchInput.addEventListener(
+        "input",
+        renderUpdates
     );
 
 }
 
 
-// ============================================
-// LOADING / ERROR / EMPTY STATES
-// ============================================
+if (jurisdictionFilter) {
 
-function showLoading() {
-
-    if (loadingState) {
-
-        loadingState.classList.remove(
-            "hidden"
-        );
-
-    }
-
-
-    hideError();
-
-}
-
-
-function hideLoading() {
-
-    if (loadingState) {
-
-        loadingState.classList.add(
-            "hidden"
-        );
-
-    }
-
-}
-
-
-function showError(
-    message
-) {
-
-    hideLoading();
-
-    hideEmpty();
-
-
-    if (errorState) {
-
-        errorState.classList.remove(
-            "hidden"
-        );
-
-    }
-
-
-    if (errorMessage) {
-
-        errorMessage.textContent =
-            message;
-
-    }
-
-}
-
-
-function hideError() {
-
-    if (errorState) {
-
-        errorState.classList.add(
-            "hidden"
-        );
-
-    }
-
-}
-
-
-function showEmpty() {
-
-    if (emptyState) {
-
-        emptyState.classList.remove(
-            "hidden"
-        );
-
-    }
-
-}
-
-
-function hideEmpty() {
-
-    if (emptyState) {
-
-        emptyState.classList.add(
-            "hidden"
-        );
-
-    }
-
-}
-
-
-// ============================================
-// DATE HELPERS
-// ============================================
-
-function parseDate(
-    value
-) {
-
-    if (!value) {
-
-        return new Date(
-            "invalid"
-        );
-
-    }
-
-
-    const text =
-        String(
-            value
-        ).trim();
-
-
-    // YYYY-MM-DD
-
-    if (
-        /^\d{4}-\d{2}-\d{2}$/.test(
-            text
-        )
-    ) {
-
-        const [
-            year,
-            month,
-            day
-        ] =
-            text
-                .split("-")
-                .map(Number);
-
-
-        return new Date(
-            year,
-            month - 1,
-            day
-        );
-
-    }
-
-
-    return new Date(
-        text
+    jurisdictionFilter.addEventListener(
+        "change",
+        renderUpdates
     );
 
 }
 
 
-function formatDate(
-    value
-) {
+if (typeFilter) {
+
+    typeFilter.addEventListener(
+        "change",
+        renderUpdates
+    );
+
+}
+
+
+if (closeModal) {
+
+    closeModal.addEventListener(
+        "click",
+        closeDetailModal
+    );
+
+}
+
+
+if (detailModal) {
+
+    const overlay =
+        detailModal.querySelector(
+            ".modal-overlay"
+        );
+
+
+    if (overlay) {
+
+        overlay.addEventListener(
+            "click",
+            closeDetailModal
+        );
+
+    }
+
+}
+
+
+// ============================================
+// ESCAPE KEY
+// ============================================
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeDetailModal();
+
+        }
+
+    }
+);
+
+
+// ============================================
+// DATE FORMATTING
+// ============================================
+
+function formatDate(dateString) {
+
+    if (!dateString) {
+
+        return "—";
+
+    }
+
 
     const date =
-        value instanceof Date
-            ? value
-            : parseDate(value);
+        new Date(dateString);
 
 
     if (
-        isNaN(
+        Number.isNaN(
             date.getTime()
         )
     ) {
 
-        return "—";
+        return escapeHtml(
+            String(dateString)
+        );
 
     }
 
@@ -1825,56 +992,65 @@ function formatDate(
 
 
 // ============================================
-// HTML ESCAPING
+// URL SAFETY
 // ============================================
 
-function escapeHtml(
-    value
-) {
+function safeUrl(url) {
 
-    if (
-        value === null ||
-        value === undefined
-    ) {
+    if (!url) {
 
         return "";
 
     }
 
 
-    return String(
-        value
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
+    try {
+
+        const parsed =
+            new URL(url);
+
+
+        if (
+            parsed.protocol !== "http:" &&
+            parsed.protocol !== "https:"
+        ) {
+
+            return "";
+
+        }
+
+
+        return escapeHtml(
+            parsed.href
         );
 
+    } catch {
+
+        return "";
+
+    }
+
+}
+
+
+// ============================================
+// HTML ESCAPING
+// ============================================
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
 }
 
 
-function escapeAttribute(
-    value
-) {
+// ============================================
+// START APPLICATION
+// ============================================
 
-    return escapeHtml(
-        value
-    );
-
-}
+loadUpdates();

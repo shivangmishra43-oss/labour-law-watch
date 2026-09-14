@@ -1,0 +1,119 @@
+name: Daily Labour Law Updates
+
+on:
+  schedule:
+    # Runs every day at 9:00 AM IST
+    # 9:00 AM IST = 3:30 AM UTC
+    - cron: "30 3 * * *"
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-labour-law-data:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # ============================================
+      # 1. DOWNLOAD THE REPOSITORY
+      # ============================================
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ============================================
+      # 2. SET UP PYTHON
+      # ============================================
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # ============================================
+      # 3. INSTALL PYTHON PACKAGES
+      # ============================================
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # ============================================
+      # 4. INSTALL PLAYWRIGHT + CHROMIUM
+      # ============================================
+
+      - name: Install Playwright browser
+        run: |
+          python -m playwright install --with-deps chromium
+
+      # ============================================
+      # 5. COLLECT CENTRAL EGAZETTE
+      # ============================================
+
+      - name: Collect Central eGazette updates
+        run: |
+          python collectors/egazette.py
+
+      # ============================================
+      # 6. EXTRACT CENTRAL GAZETTE INFORMATION
+      # ============================================
+
+      - name: Extract Central Gazette information
+        run: |
+          python extractors/legal_extractor.py
+
+      # ============================================
+      # 7. COLLECT KARNATAKA E-GAZETTE
+      # ============================================
+
+      - name: Collect Karnataka e-Gazette updates
+        run: |
+          python collectors/karnataka.py
+
+      # ============================================
+      # 8. EXTRACT KARNATAKA GAZETTE INFORMATION
+      # ============================================
+
+      - name: Extract Karnataka Gazette information
+        run: |
+          python extractors/karnataka_extractor.py
+
+      # ============================================
+      # 9. IMPORT KARNATAKA DATA
+      # ============================================
+
+      - name: Import Karnataka updates
+        run: |
+          python database/import_karnataka.py
+
+      # ============================================
+      # 10. EXPORT WEBSITE DATA
+      # ============================================
+
+      - name: Export updates JSON
+        run: |
+          python export_updates.py
+
+      # ============================================
+      # 11. SAVE UPDATED WEBSITE DATA
+      # ============================================
+
+      - name: Commit updated website data
+        run: |
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/updates.json
+
+          if git diff --cached --quiet; then
+            echo "No website data changes detected."
+          else
+            git commit -m "Update labour law data"
+            git push
+          fi
