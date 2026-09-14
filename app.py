@@ -5,7 +5,7 @@ from database import get_connection, create_database
 
 app = Flask(
     __name__,
-    static_folder="frontend",
+    static_folder=".",
     static_url_path=""
 )
 
@@ -19,20 +19,18 @@ create_database()
 
 @app.route("/")
 def home():
-
     return send_from_directory(
-        "frontend",
+        ".",
         "index.html"
     )
 
 
 # ============================================
-# LIVE JSON DATA
+# WEBSITE DATA
 # ============================================
 
 @app.route("/data/updates.json")
 def updates_json():
-
     return send_from_directory(
         "data",
         "updates.json"
@@ -40,7 +38,7 @@ def updates_json():
 
 
 # ============================================
-# OLD API
+# API - ALL UPDATES
 # ============================================
 
 @app.route("/api/updates")
@@ -81,7 +79,7 @@ def get_updates():
 
 
 # ============================================
-# SINGLE UPDATE
+# API - SINGLE UPDATE
 # ============================================
 
 @app.route(
@@ -125,7 +123,7 @@ def get_update(update_id):
 
 
 # ============================================
-# START SERVER
+# RUN FLASK
 # ============================================
 
 if __name__ == "__main__":
