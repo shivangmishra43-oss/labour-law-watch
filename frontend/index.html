@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Labour Law Watch - Track Indian labour law updates from official government sources."
+    >
+
+    <title>Labour Law Watch</title>
+
+    <link
+        rel="stylesheet"
+        href="/style.css"
+    >
+</head>
+
+<body>
+
+    <!-- ============================= -->
+    <!-- HEADER -->
+    <!-- ============================= -->
+
+    <header class="site-header">
+
+        <div class="header-inner">
+
+            <a
+                href="/"
+                class="brand"
+            >
+
+                <div class="brand-mark">
+                    LL
+                </div>
+
+                <div class="brand-text">
+
+                    <div class="brand-name">
+                        Labour Law Watch
+                    </div>
+
+                    <div class="brand-subtitle">
+                        Labour law updates
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- ============================= -->
+    <!-- MAIN -->
+    <!-- ============================= -->
+
+    <main class="container">
+
+        <!-- PAGE INTRO -->
+
+        <section class="page-header">
+
+            <div>
+
+                <div class="eyebrow">
+                    LEGAL UPDATES
+                </div>
+
+                <h1>
+                    Latest Labour Law Updates
+                </h1>
+
+                <p>
+                    Track labour law notifications, amendments,
+                    circulars and other legal developments.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- STATS -->
+        <!-- ============================= -->
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    Total Updates
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="totalUpdates"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    Karnataka
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="karnatakaUpdates"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    Central
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="centralUpdates"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    Latest
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="latestDate"
+                >
+                    —
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- FILTERS -->
+        <!-- ============================= -->
+
+        <section class="filters-panel">
+
+            <div class="filter-row">
+
+                <!-- SEARCH -->
+
+                <div class="search-wrapper">
+
+                    <label
+                        for="searchInput"
+                        class="filter-label"
+                    >
+                        Search
+                    </label>
+
+                    <div class="search-box">
+
+                        <span class="search-icon">
+                            ⌕
+                        </span>
+
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search updates..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- JURISDICTION -->
+
+                <div class="filter-group">
+
+                    <div class="filter-label">
+                        Jurisdiction
+                    </div>
+
+                    <div class="filter-buttons">
+
+                        <button
+                            type="button"
+                            class="filter-button active"
+                            data-jurisdiction="all"
+                        >
+                            All
+                        </button>
+
+                        <button
+                            type="button"
+                            class="filter-button"
+                            data-jurisdiction="Central"
+                        >
+                            Central
+                        </button>
+
+                        <button
+                            type="button"
+                            class="filter-button"
+                            data-jurisdiction="Karnataka"
+                        >
+                            Karnataka
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- UPDATE TYPE -->
+
+            <div class="type-filter-section">
+
+                <div class="filter-label">
+                    Update Type
+                </div>
+
+                <div
+                    id="typeFilters"
+                    class="filter-buttons"
+                >
+                    <button
+                        type="button"
+                        class="filter-button active"
+                        data-type="all"
+                    >
+                        All
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- SORT -->
+
+            <div class="filter-footer">
+
+                <div
+                    class="results-count"
+                    id="resultsCount"
+                >
+                    Loading updates...
+                </div>
+
+                <div class="sort-wrapper">
+
+                    <label
+                        for="sortSelect"
+                        class="sort-label"
+                    >
+                        Sort
+                    </label>
+
+                    <select
+                        id="sortSelect"
+                    >
+                        <option value="newest">
+                            Newest first
+                        </option>
+
+                        <option value="oldest">
+                            Oldest first
+                        </option>
+                    </select>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- LOADING -->
+        <!-- ============================= -->
+
+        <div
+            id="loadingState"
+            class="state-box"
+        >
+
+            <div class="loading-spinner"></div>
+
+            <div>
+                Loading labour law updates...
+            </div>
+
+        </div>
+
+
+        <!-- ============================= -->
+        <!-- ERROR -->
+        <!-- ============================= -->
+
+        <div
+            id="errorState"
+            class="state-box error-state hidden"
+        >
+
+            <div class="state-icon">
+                !
+            </div>
+
+            <div>
+
+                <h3>
+                    Unable to load updates
+                </h3>
+
+                <p id="errorMessage">
+                    Unable to connect to the Flask backend.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ============================= -->
+        <!-- EMPTY -->
+        <!-- ============================= -->
+
+        <div
+            id="emptyState"
+            class="state-box hidden"
+        >
+
+            <div class="state-icon">
+                —
+            </div>
+
+            <div>
+
+                <h3>
+                    No updates found
+                </h3>
+
+                <p>
+                    Try changing your search or filters.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ============================= -->
+        <!-- UPDATE CARDS -->
+        <!-- ============================= -->
+
+        <section
+            id="updatesContainer"
+            class="updates-grid"
+        >
+        </section>
+
+    </main>
+
+
+    <!-- ============================= -->
+    <!-- DETAIL MODAL -->
+    <!-- ============================= -->
+
+    <div
+        id="detailModal"
+        class="modal hidden"
+        aria-hidden="true"
+    >
+
+        <div class="modal-backdrop"></div>
+
+        <div
+            class="modal-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modalTitle"
+        >
+
+            <button
+                type="button"
+                class="modal-close"
+                id="modalClose"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+
+            <div class="modal-header">
+
+                <div
+                    class="modal-source"
+                    id="modalSource"
+                >
+                    —
+                </div>
+
+                <h2
+                    id="modalTitle"
+                >
+                    —
+                </h2>
+
+                <div
+                    class="modal-meta"
+                    id="modalMeta"
+                >
+                </div>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div
+                    id="modalContent"
+                    class="modal-content"
+                >
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <a
+                    href="#"
+                    id="modalSourceButton"
+                    class="button button-secondary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Official source
+                </a>
+
+                <a
+                    href="#"
+                    id="modalDocumentButton"
+                    class="button button-primary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    View document
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================= -->
+
+    <script src="/app.js"></script>
+
+</body>
+</html>

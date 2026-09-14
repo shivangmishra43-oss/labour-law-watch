@@ -1,0 +1,95 @@
+# ============================================
+# LABOUR LAW WATCH
+# Git Ignore File
+# ============================================
+
+
+# ============================================
+# PYTHON
+# ============================================
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python testing/cache
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+
+# ============================================
+# LOCAL DATABASE
+# ============================================
+
+*.db
+*.sqlite
+*.sqlite3
+
+
+# ============================================
+# DOWNLOADED GAZETTES / LOCAL DATA
+# ============================================
+
+downloads/
+
+
+# ============================================
+# ENVIRONMENT VARIABLES / SECRETS
+# ============================================
+
+.env
+.env.*
+!.env.example
+
+
+# ============================================
+# VS CODE
+# ============================================
+
+.vscode/
+
+
+# ============================================
+# OPERATING SYSTEM FILES
+# ============================================
+
+.DS_Store
+Thumbs.db
+
+
+# ============================================
+# LOGS
+# ============================================
+
+*.log
+
+
+# ============================================
+# TEMPORARY FILES
+# ============================================
+
+*.tmp
+*.temp
+
+
+# ============================================
+# LOCAL DEBUGGING / TEST ARTIFACTS
+# ============================================
+
+egazette_*.html
+egazette_*.txt
+egazette_*.png
+
+inspect_post.py
+egazette_download_test.py
+egazette_request_test.py
+test_egazette_iframe.py
+test_openai_connection.py
+test_pdf_text.py
