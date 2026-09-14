@@ -644,13 +644,18 @@ def collect():
                 "1. Opening Karnataka e-Gazette..."
             )
 
-            page.goto(
-                HOME_URL,
-                wait_until="domcontentloaded",
-                timeout=120000
-            )
+           page.goto(
+    HOME_URL,
+    wait_until="commit",
+    timeout=120000
+)
 
-            time.sleep(2)
+page.wait_for_selector(
+    "body",
+    timeout=30000
+)
+
+time.sleep(5)
 
             print(
                 "   Loaded:",
