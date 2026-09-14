@@ -1,4 +1,4 @@
-name: Daily Labour Law Updates
+name: Daily Central Labour Law Updates
 
 on:
   schedule:
@@ -13,7 +13,7 @@ permissions:
 
 jobs:
 
-  update-labour-law-data:
+  update-central-labour-law-data:
 
     runs-on: ubuntu-latest
 
@@ -57,48 +57,7 @@ jobs:
 
 
       # ============================================
-      # 5. DIAGNOSTIC - KARNATAKA CONNECTIVITY
-      # ============================================
-
-      - name: Test Karnataka e-Gazette connectivity
-        run: |
-
-          echo "========================================"
-          echo "KARNATAKA E-GAZETTE NETWORK TEST"
-          echo "========================================"
-
-          echo ""
-          echo "Testing DNS..."
-          getent hosts erajyapatra.karnataka.gov.in || true
-
-          echo ""
-          echo "Testing HTTPS connection..."
-          curl \
-            --verbose \
-            --location \
-            --connect-timeout 30 \
-            --max-time 90 \
-            --output /tmp/karnataka_response.html \
-            --write-out "\nHTTP_STATUS=%{http_code}\nTOTAL_TIME=%{time_total}\n" \
-            "https://erajyapatra.karnataka.gov.in/"
-
-          echo ""
-          echo "Response file information:"
-          ls -lh /tmp/karnataka_response.html || true
-
-          echo ""
-          echo "First 500 characters of response:"
-          head -c 500 /tmp/karnataka_response.html || true
-
-          echo ""
-          echo ""
-          echo "========================================"
-          echo "NETWORK TEST COMPLETE"
-          echo "========================================"
-
-
-      # ============================================
-      # 6. COLLECT CENTRAL EGAZETTE
+      # 5. COLLECT CENTRAL E-GAZETTE
       # ============================================
 
       - name: Collect Central eGazette updates
@@ -107,7 +66,7 @@ jobs:
 
 
       # ============================================
-      # 7. EXTRACT CENTRAL GAZETTE INFORMATION
+      # 6. EXTRACT CENTRAL GAZETTE INFORMATION
       # ============================================
 
       - name: Extract Central Gazette information
@@ -116,34 +75,7 @@ jobs:
 
 
       # ============================================
-      # 8. COLLECT KARNATAKA E-GAZETTE
-      # ============================================
-
-      - name: Collect Karnataka e-Gazette updates
-        run: |
-          python collectors/karnataka.py
-
-
-      # ============================================
-      # 9. EXTRACT KARNATAKA GAZETTE INFORMATION
-      # ============================================
-
-      - name: Extract Karnataka Gazette information
-        run: |
-          python extractors/karnataka_extractor.py
-
-
-      # ============================================
-      # 10. IMPORT KARNATAKA DATA
-      # ============================================
-
-      - name: Import Karnataka updates
-        run: |
-          python database/import_karnataka.py
-
-
-      # ============================================
-      # 11. EXPORT WEBSITE DATA
+      # 7. EXPORT WEBSITE DATA
       # ============================================
 
       - name: Export updates JSON
@@ -152,7 +84,7 @@ jobs:
 
 
       # ============================================
-      # 12. COMMIT UPDATED WEBSITE DATA
+      # 8. COMMIT UPDATED WEBSITE DATA
       # ============================================
 
       - name: Commit updated website data
@@ -166,6 +98,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No website data changes detected."
           else
-            git commit -m "Update labour law data"
+            git commit -m "Update central labour law data"
             git push
           fi
