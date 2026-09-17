@@ -1,6 +1,19 @@
 {
-  "count": 17,
+  "count": 18,
   "updates": [
+    {
+      "id": 1,
+      "jurisdiction": "Central",
+      "update_type": "Other",
+      "topic": "Social Security",
+      "title": "Corrigendum EDLI",
+      "description": "Corrigendum, Impacted Rule : Code on Social Security, 2020, Corrigendum, Change in Substance, Applicable Section/Rule : Section 15(1)(c), Date of Applicability : 10/09/2026, Impact : Actionable",
+      "publication_date": "2026-09-16",
+      "effective_date": "2026-09-10",
+      "source": "eGazette",
+      "source_url": "https://egazette.gov.in/SearchMinistry.aspx",
+      "document_url": "https://egazette.gov.in/WriteReadData/2026/276271.pdf"
+    },
     {
       "id": 21,
       "jurisdiction": "Karnataka",
@@ -15,7 +28,7 @@
       "document_url": "https://erajyapatra.karnataka.gov.in/WriteReadData/2026/11284.pdf"
     },
     {
-      "id": 1,
+      "id": 2,
       "jurisdiction": "Central",
       "update_type": "Amendment",
       "topic": "EPF / EPFO",
@@ -28,7 +41,7 @@
       "document_url": "https://egazette.gov.in/WriteReadData/2026/276091.pdf"
     },
     {
-      "id": 2,
+      "id": 3,
       "jurisdiction": "Central",
       "update_type": "Supersession",
       "topic": "Social Security",
