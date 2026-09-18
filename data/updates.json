@@ -1,8 +1,34 @@
 {
-  "count": 18,
+  "count": 20,
   "updates": [
     {
       "id": 1,
+      "jurisdiction": "Central",
+      "update_type": "Other",
+      "topic": "General Labour Law",
+      "title": "In exercise of the powers conferred by clause",
+      "description": ", , , , , ,",
+      "publication_date": "2026-09-17",
+      "effective_date": "2026-09-17",
+      "source": "eGazette",
+      "source_url": "https://egazette.gov.in/SearchMinistry.aspx",
+      "document_url": "https://egazette.gov.in/WriteReadData/2026/276299.pdf"
+    },
+    {
+      "id": 2,
+      "jurisdiction": "Central",
+      "update_type": "Other",
+      "topic": "Social Security",
+      "title": "Corrigendum 143",
+      "description": "6) (Corrigendum, Impacted Rule : Code on Social Security, 2020, Corrigendum, Change in Substance, Applicable Section/Rule : Section 143(6), Date of Applicability : 10/09/2026, Impact : Actionable",
+      "publication_date": "2026-09-17",
+      "effective_date": "2026-09-10",
+      "source": "eGazette",
+      "source_url": "https://egazette.gov.in/SearchMinistry.aspx",
+      "document_url": "https://egazette.gov.in/WriteReadData/2026/276293.pdf"
+    },
+    {
+      "id": 3,
       "jurisdiction": "Central",
       "update_type": "Other",
       "topic": "Social Security",
@@ -28,7 +54,7 @@
       "document_url": "https://erajyapatra.karnataka.gov.in/WriteReadData/2026/11284.pdf"
     },
     {
-      "id": 2,
+      "id": 4,
       "jurisdiction": "Central",
       "update_type": "Amendment",
       "topic": "EPF / EPFO",
@@ -41,7 +67,7 @@
       "document_url": "https://egazette.gov.in/WriteReadData/2026/276091.pdf"
     },
     {
-      "id": 3,
+      "id": 5,
       "jurisdiction": "Central",
       "update_type": "Supersession",
       "topic": "Social Security",
