@@ -1,6 +1,45 @@
 {
-  "count": 15,
+  "count": 20,
   "updates": [
+    {
+      "id": 1,
+      "jurisdiction": "Central",
+      "update_type": "Other",
+      "topic": "General Labour Law",
+      "title": "In exercise of the powers conferred by clause",
+      "description": ", , , , , ,",
+      "publication_date": "2026-09-17",
+      "effective_date": "2026-09-17",
+      "source": "eGazette",
+      "source_url": "https://egazette.gov.in/SearchMinistry.aspx",
+      "document_url": "https://egazette.gov.in/WriteReadData/2026/276299.pdf"
+    },
+    {
+      "id": 2,
+      "jurisdiction": "Central",
+      "update_type": "Other",
+      "topic": "Social Security",
+      "title": "Corrigendum 143",
+      "description": "6) (Corrigendum, Impacted Rule : Code on Social Security, 2020, Corrigendum, Change in Substance, Applicable Section/Rule : Section 143(6), Date of Applicability : 10/09/2026, Impact : Actionable",
+      "publication_date": "2026-09-17",
+      "effective_date": "2026-09-10",
+      "source": "eGazette",
+      "source_url": "https://egazette.gov.in/SearchMinistry.aspx",
+      "document_url": "https://egazette.gov.in/WriteReadData/2026/276293.pdf"
+    },
+    {
+      "id": 3,
+      "jurisdiction": "Central",
+      "update_type": "Other",
+      "topic": "Social Security",
+      "title": "Corrigendum EDLI",
+      "description": "Corrigendum, Impacted Rule : Code on Social Security, 2020, Corrigendum, Change in Substance, Applicable Section/Rule : Section 15(1)(c), Date of Applicability : 10/09/2026, Impact : Actionable",
+      "publication_date": "2026-09-16",
+      "effective_date": "2026-09-10",
+      "source": "eGazette",
+      "source_url": "https://egazette.gov.in/SearchMinistry.aspx",
+      "document_url": "https://egazette.gov.in/WriteReadData/2026/276271.pdf"
+    },
     {
       "id": 21,
       "jurisdiction": "Karnataka",
@@ -13,6 +52,32 @@
       "source": "Karnataka e-Gazette",
       "source_url": "https://erajyapatra.karnataka.gov.in/",
       "document_url": "https://erajyapatra.karnataka.gov.in/WriteReadData/2026/11284.pdf"
+    },
+    {
+      "id": 4,
+      "jurisdiction": "Central",
+      "update_type": "Amendment",
+      "topic": "EPF / EPFO",
+      "title": "Amendment in Pattern of Investment related to Exempted Establishment under EPFO.",
+      "description": "Amendment, Impacted Rule : EPF &amp; MP Act, 1952, Amendment, Change in Substance, Applicable Section/Rule : Section 17(3)(a), Date of Applicability : 09/09/2026, Impact : Actionable",
+      "publication_date": "2026-09-09",
+      "effective_date": "2026-09-09",
+      "source": "eGazette",
+      "source_url": "https://egazette.gov.in/SearchMinistry.aspx",
+      "document_url": "https://egazette.gov.in/WriteReadData/2026/276091.pdf"
+    },
+    {
+      "id": 5,
+      "jurisdiction": "Central",
+      "update_type": "Supersession",
+      "topic": "Social Security",
+      "title": "Supersession of notification SO. 2523",
+      "description": "E) dated 15.05.2026 (New Gazette, Impacted Rule : Code on Social Security, 2020, New Gazette, , Applicable Section/Rule : Section 142, Date of Applicability : 24/08/2026, Impact : Actionable",
+      "publication_date": "2026-09-02",
+      "effective_date": "2026-08-24",
+      "source": "eGazette",
+      "source_url": "https://egazette.gov.in/SearchMinistry.aspx",
+      "document_url": "https://egazette.gov.in/WriteReadData/2026/275929.pdf"
     },
     {
       "id": 20,
