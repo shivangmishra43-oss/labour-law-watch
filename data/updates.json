@@ -1,19 +1,6 @@
 {
-  "count": 16,
+  "count": 15,
   "updates": [
-    {
-      "id": 1,
-      "jurisdiction": "Central",
-      "update_type": "Amendment",
-      "topic": "Social Security",
-      "title": "Notification regarding Govt. Contribution in respect of EPS, 2026",
-      "description": "Amendment, Impacted Rule : Code on Social Security, 2020, Amendment, Change in Substance, Applicable Section/Rule : Section 15(1)(b), Date of Applicability : 17/09/2026, Impact : Actionable",
-      "publication_date": "2026-10-15",
-      "effective_date": "2026-09-17",
-      "source": "eGazette",
-      "source_url": "https://egazette.gov.in/SearchMinistry.aspx",
-      "document_url": "https://egazette.gov.in/WriteReadData/2026/277193.pdf"
-    },
     {
       "id": 21,
       "jurisdiction": "Karnataka",
