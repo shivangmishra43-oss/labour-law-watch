@@ -1,8 +1,21 @@
 {
-  "count": 16,
+  "count": 17,
   "updates": [
     {
       "id": 1,
+      "jurisdiction": "Central",
+      "update_type": "Other",
+      "topic": "Social Security",
+      "title": "National Social Security Board",
+      "description": "NSSB) under the Code On Social Security, 2020 (New Gazette, Impacted Rule : Code On Social Security, 2020, New Gazette, , Applicable Section/Rule : Section 6 and Section 114, Date of Applicability : 29/10/2026, Impact : Actionable",
+      "publication_date": "2026-10-29",
+      "effective_date": "2026-10-29",
+      "source": "eGazette",
+      "source_url": "https://egazette.gov.in/SearchMinistry.aspx",
+      "document_url": "https://egazette.gov.in/WriteReadData/2026/277510.pdf"
+    },
+    {
+      "id": 2,
       "jurisdiction": "Central",
       "update_type": "Amendment",
       "topic": "Social Security",
