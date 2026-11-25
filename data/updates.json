@@ -1,6 +1,19 @@
 {
-  "count": 18,
+  "count": 19,
   "updates": [
+    {
+      "id": 3,
+      "jurisdiction": "Central",
+      "update_type": "Notification",
+      "topic": "Social Security",
+      "title": "Notification regarding Pattern of Investment for Exempted Establishments.",
+      "description": "New Gazette, Impacted Rule : 143(6) of Code on Social Security, 2020, New Gazette, , Applicable Section/Rule : 143(6), Date of Applicability : 20/11/2026, Impact : Actionable",
+      "publication_date": "2026-11-25",
+      "effective_date": "2026-11-20",
+      "source": "eGazette",
+      "source_url": "https://egazette.gov.in/SearchMinistry.aspx",
+      "document_url": "https://egazette.gov.in/WriteReadData/2026/278160.pdf"
+    },
     {
       "id": 1,
       "jurisdiction": "Central",
@@ -28,7 +41,7 @@
       "document_url": "https://egazette.gov.in/WriteReadData/2026/278111.pdf"
     },
     {
-      "id": 3,
+      "id": 4,
       "jurisdiction": "Central",
       "update_type": "Other",
       "topic": "Occupational Safety & Health",
